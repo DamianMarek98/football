@@ -1,42 +1,47 @@
 package deny.football.data;
 
-import deny.football.data.infrastructure.PlayerDocument;
 import deny.football.data.transfermarkt.TransfermarktFacade;
-import deny.football.data.transfermarkt.dto.Competition;
-import deny.football.data.transfermarkt.dto.Player;
-import deny.football.data.transfermarkt.dto.PlayerRepository;
+import deny.football.data.transfermarkt.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/test")
+@RequestMapping
 public class TestController {
     private final TransfermarktFacade transfermarktFacade;
-    private final PlayerRepository playerRepository;
 
     @Autowired
-    public TestController(TransfermarktFacade transfermarktFacade, PlayerRepository playerRepository) {
+    public TestController(TransfermarktFacade transfermarktFacade) {
         this.transfermarktFacade = transfermarktFacade;
-        this.playerRepository = playerRepository;
     }
 
-    @GetMapping
-    public Competition test() {
-        return transfermarktFacade.getCompetitionClubs("GB1");
+    @GetMapping("/clubs/{leagueId}")
+    public Competition getClubs(@PathVariable String leagueId) {
+        return transfermarktFacade.getCompetitionClubs(leagueId);
     }
 
-    @GetMapping("/players")
-    public List<Player> test2() {
-        return transfermarktFacade.getPlayers(31L);
+    @GetMapping("/clubs/{clubId}/players")
+    public List<Player> getClubPlayers(@PathVariable long clubId) {
+        return transfermarktFacade.getPlayers(clubId);
     }
 
-    @GetMapping("/mongo")
-    public String test3() {
-        playerRepository.save(new PlayerDocument(2L, "aa", "test", "aaa", 23));
-        return playerRepository.findById(1L).orElseThrow().toString();
+    @GetMapping("/players/{playerId}/profile")
+    public PlayerProfile getPlayerProfile(@PathVariable long playerId) {
+        return transfermarktFacade.getPlayerProfile(playerId);
+    }
+
+    @GetMapping("/players/{playerId}/transfers")
+    public List<Transfer> getPlayerTransfers(@PathVariable long playerId) {
+        return transfermarktFacade.getMarketTransfers(playerId);
+    }
+
+    @GetMapping("/players/{playerId}/market-values")
+    public List<MarketValue> getPlayerMarketValues(@PathVariable long playerId) {
+        return transfermarktFacade.getMarketValueHistory(playerId);
     }
 }

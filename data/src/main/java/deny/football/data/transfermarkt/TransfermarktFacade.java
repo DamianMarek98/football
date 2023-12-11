@@ -1,7 +1,6 @@
 package deny.football.data.transfermarkt;
 
-import deny.football.data.transfermarkt.dto.Competition;
-import deny.football.data.transfermarkt.dto.Player;
+import deny.football.data.transfermarkt.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -23,10 +22,28 @@ public class TransfermarktFacade {
         return restTemplate.getForObject(BASE_URL + "/competitions/" + id + "/clubs", Competition.class);
     }
 
+    public PlayerProfile getPlayerProfile(Long playerId) {
+        return restTemplate.getForObject(BASE_URL + "/players/" + playerId + "/profile", PlayerProfile.class);
+    }
+
     public List<Player> getPlayers(Long clubId) {
         return Objects.requireNonNull(restTemplate.getForObject(BASE_URL + "/clubs/" + clubId + "/players", ClubPlayersResponse.class))
                 .players();
     }
 
     private record ClubPlayersResponse(String id, List<Player> players) {}
+    
+    public List<MarketValue> getMarketValueHistory(Long playerId) {
+        return Objects.requireNonNull(restTemplate.getForObject(BASE_URL + "/players/" + playerId + "/market_value", MarketValueResponse.class))
+                .marketValueHistory();
+    }
+
+    private record MarketValueResponse(String id, List<MarketValue> marketValueHistory) {}
+
+    public List<Transfer> getMarketTransfers(Long playerId) {
+        return Objects.requireNonNull(restTemplate.getForObject(BASE_URL + "/players/" + playerId + "/transfers", TransfersResponse.class))
+                .transfers();
+    }
+
+    private record TransfersResponse(String id, List<Transfer> transfers) {}
 }
