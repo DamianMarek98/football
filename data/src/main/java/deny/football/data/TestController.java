@@ -1,8 +1,10 @@
 package deny.football.data;
 
+import deny.football.data.infrastructure.PlayerDocument;
 import deny.football.data.transfermarkt.TransfermarktFacade;
 import deny.football.data.transfermarkt.dto.Competition;
 import deny.football.data.transfermarkt.dto.Player;
+import deny.football.data.transfermarkt.dto.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,10 +16,12 @@ import java.util.List;
 @RequestMapping("/test")
 public class TestController {
     private final TransfermarktFacade transfermarktFacade;
+    private final PlayerRepository playerRepository;
 
     @Autowired
-    public TestController(TransfermarktFacade transfermarktFacade) {
+    public TestController(TransfermarktFacade transfermarktFacade, PlayerRepository playerRepository) {
         this.transfermarktFacade = transfermarktFacade;
+        this.playerRepository = playerRepository;
     }
 
     @GetMapping
@@ -28,5 +32,11 @@ public class TestController {
     @GetMapping("/players")
     public List<Player> test2() {
         return transfermarktFacade.getPlayers(31L);
+    }
+
+    @GetMapping("/mongo")
+    public String test3() {
+        playerRepository.save(new PlayerDocument(2L, "aa", "test", "aaa", 23));
+        return playerRepository.findById(1L).orElseThrow().toString();
     }
 }
