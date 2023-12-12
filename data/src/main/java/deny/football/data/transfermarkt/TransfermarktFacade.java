@@ -22,6 +22,10 @@ public class TransfermarktFacade {
         return restTemplate.getForObject(BASE_URL + "/competitions/" + id + "/clubs", Competition.class);
     }
 
+    public ClubProfile getClubProfile(Long clubId) {
+        return restTemplate.getForObject(BASE_URL + "/clubs/" + clubId + "/profile", ClubProfile.class);
+    }
+
     public PlayerProfile getPlayerProfile(Long playerId) {
         return restTemplate.getForObject(BASE_URL + "/players/" + playerId + "/profile", PlayerProfile.class);
     }

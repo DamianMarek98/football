@@ -1,5 +1,7 @@
 package deny.football.data;
 
+import deny.football.data.infrastructure.PlayerDocument;
+import deny.football.data.infrastructure.PlayerRepository;
 import deny.football.data.transfermarkt.TransfermarktFacade;
 import deny.football.data.transfermarkt.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +16,22 @@ import java.util.List;
 @RequestMapping
 public class TestController {
     private final TransfermarktFacade transfermarktFacade;
+    private final PlayerRepository playerRepository;
 
     @Autowired
-    public TestController(TransfermarktFacade transfermarktFacade) {
+    public TestController(TransfermarktFacade transfermarktFacade, PlayerRepository playerRepository) {
         this.transfermarktFacade = transfermarktFacade;
+        this.playerRepository = playerRepository;
     }
 
     @GetMapping("/clubs/{leagueId}")
     public Competition getClubs(@PathVariable String leagueId) {
         return transfermarktFacade.getCompetitionClubs(leagueId);
+    }
+
+    @GetMapping("/clubs/{clubId}/profile")
+    public ClubProfile getClubProfile(@PathVariable long clubId) {
+        return transfermarktFacade.getClubProfile(clubId);
     }
 
     @GetMapping("/clubs/{clubId}/players")
@@ -43,5 +52,10 @@ public class TestController {
     @GetMapping("/players/{playerId}/market-values")
     public List<MarketValue> getPlayerMarketValues(@PathVariable long playerId) {
         return transfermarktFacade.getMarketValueHistory(playerId);
+    }
+
+    @GetMapping("/players")
+    public List<PlayerDocument> getPlayers() {
+        return playerRepository.findAll();
     }
 }
