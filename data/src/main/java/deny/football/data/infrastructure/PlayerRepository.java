@@ -1,4 +1,4 @@
-package deny.football.data.transfermarkt.dto;
+package deny.football.data.infrastructure;
 
 import deny.football.data.infrastructure.PlayerDocument;
 import org.springframework.data.mongodb.repository.MongoRepository;

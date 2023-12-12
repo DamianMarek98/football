@@ -1,6 +1,6 @@
 package deny.football.data.config;
 
-import deny.football.data.transfermarkt.dto.PlayerRepository;
+import deny.football.data.infrastructure.PlayerRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.web.client.RestTemplate;
