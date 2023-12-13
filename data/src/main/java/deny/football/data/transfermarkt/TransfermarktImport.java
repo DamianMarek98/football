@@ -25,55 +25,53 @@ public class TransfermarktImport {
     Logger logger = LoggerFactory.getLogger(TransfermarktImport.class);
     private final TransfermarktFacade transfermarktFacade;
     private final PlayerRepository playerRepository;
+    private final ClubRepository clubRepository;
     private final ClubsCreator clubsCreator;
 
     @Autowired
-    public TransfermarktImport(TransfermarktFacade transfermarktFacade, PlayerRepository playerRepository, ClubsCreator clubsCreator) {
+    public TransfermarktImport(TransfermarktFacade transfermarktFacade, PlayerRepository playerRepository, ClubRepository clubRepository, ClubsCreator clubsCreator) {
         this.transfermarktFacade = transfermarktFacade;
         this.playerRepository = playerRepository;
+        this.clubRepository = clubRepository;
         this.clubsCreator = clubsCreator;
     }
 
     @Async
-    @Transactional
     public void importPlayers(String leagueId) {
         logger.info("Importing players...");
         var competition = transfermarktFacade.getCompetitionClubs(leagueId);
         createClubDocuments(competition);
+        var players = competition.clubs().stream()
+                .flatMap(club -> transfermarktFacade.getPlayers(club.id()).stream())
+                .filter(player -> !playerRepository.existsById(player.id()))
+                .toList();
 
+        logger.info("{} players to import!", players.size());
         final ThreadFactory threadFactory = Thread.ofVirtual().name("routine-", 0).factory();
         try (var executor = Executors.newThreadPerTaskExecutor(threadFactory)) {
-            var players = competition.clubs().stream()
-                    .flatMap(club -> transfermarktFacade.getPlayers(club.id()).stream())
-                    .map(player -> {
-                        try {
-                            logger.info("1 second delay");
-                            Thread.sleep(1000);
-                            var playerProfileFuture = executor.submit(() -> {
-                                PlayerProfile profile = transfermarktFacade.getPlayerProfile(player.id());
-                                logger.info("player profile imported");
-                                return profile;
-                            });
-                            var transfersFuture = executor.submit(() -> {
-                                var transfers = transfermarktFacade.getMarketTransfers(player.id());
-                                logger.info("player transfers imported");
-                                return transfers;
-                            });
-                            var markerValuesFuture = executor.submit(() -> {
-                                var values = transfermarktFacade.getMarketValueHistory(player.id());
-                                logger.info("player values imported");
-                                return values;
-                            });
-                            logger.info("Imported player: {}", playerProfileFuture.get().name());
-                            return PlayerDocumentFactory.create(player, playerProfileFuture.get().imageURL(), transfersFuture.get(), markerValuesFuture.get());
-                        } catch (InterruptedException | ExecutionException e) {
-                            Thread.currentThread().interrupt();
-                            logger.warn("Failed to import player: {}", player.name());
-                            throw new RuntimeException(e);
-                        }
-                    })
-                    .toList();
-            playerRepository.saveAll(players);
+            for (var player : players) {
+                logger.info("Player: {} import started", player.name());
+                var playerProfileFuture = executor.submit(() -> {
+                    PlayerProfile profile = transfermarktFacade.getPlayerProfile(player.id());
+                    logger.info("player profile imported");
+                    return profile;
+                });
+                var transfersFuture = executor.submit(() -> {
+                    var transfers = transfermarktFacade.getMarketTransfers(player.id());
+                    logger.info("player transfers imported");
+                    return transfers;
+                });
+                var markerValuesFuture = executor.submit(() -> {
+                    var values = transfermarktFacade.getMarketValueHistory(player.id());
+                    logger.info("player values imported");
+                    return values;
+                });
+                logger.info("Imported player: {}", playerProfileFuture.get().name());
+                playerRepository.save(PlayerDocumentFactory.create(player, playerProfileFuture.get().imageURL(), transfersFuture.get(), markerValuesFuture.get()));
+            }
+        } catch(InterruptedException | ExecutionException e){
+                Thread.currentThread().interrupt();
+                throw new RuntimeException(e);
         }
     }
 
@@ -81,9 +79,10 @@ public class TransfermarktImport {
         logger.info("Competition obtained");
         var clubProfiles = competition.clubs()
                 .stream()
+                .filter(club -> !clubRepository.existsById(club.id()))
                 .map(club -> transfermarktFacade.getClubProfile(club.id()))
                 .toList();
         clubsCreator.createClubs(clubProfiles);
-        logger.info("Clubs created");
+        logger.info("{} clubs created", clubProfiles.size());
     }
 }

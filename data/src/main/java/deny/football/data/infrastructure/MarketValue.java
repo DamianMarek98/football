@@ -8,7 +8,7 @@ public class MarketValue {
     private final Integer age;
     private final String date;
     private final String valueString;
-    private final BigDecimal value;
+    private BigDecimal value;
     private final Long clubId;
 
     public MarketValue(Integer age, String date, String valueString, Long clubId) {
@@ -41,5 +41,9 @@ public class MarketValue {
 
     public Long getClubId() {
         return clubId;
+    }
+
+    public void setValue(BigDecimal value) {
+        this.value = value;
     }
 }
