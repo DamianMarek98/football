@@ -14,6 +14,18 @@ public class Transfer {
         this.id = id;
     }
 
+    public static Transfer from(deny.football.data.transfermarkt.dto.Transfer transferDto) {
+        Transfer transfer = new Transfer(transferDto.id());
+        transfer.setClubFromId(transferDto.from().clubID());
+        transfer.setClubFromName(transferDto.from().clubName());
+        transfer.setClubToId(transferDto.to().clubID());
+        transfer.setClubToName(transferDto.to().clubName());
+        transfer.setDate(transferDto.date());
+        transfer.setUpcoming(transferDto.upcoming());
+        transfer.setSeason(transferDto.season());
+        return transfer;
+    }
+
     public Long getId() {
         return id;
     }

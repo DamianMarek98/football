@@ -16,7 +16,7 @@ public class PlayerDocument {
     private String position;
     private String dateOfBirth;
     private Integer age;
-    private List<String> nationality;
+    private List<String> nationalities;
     private BigDecimal maxMarketValue;
     private BigDecimal currentMarketValue;
     private final List<Transfer> transfers;
@@ -78,12 +78,12 @@ public class PlayerDocument {
         this.age = age;
     }
 
-    public List<String> getNationality() {
-        return nationality;
+    public List<String> getNationalities() {
+        return nationalities;
     }
 
-    public void setNationality(List<String> nationality) {
-        this.nationality = nationality;
+    public void setNationalities(List<String> nationalities) {
+        this.nationalities = nationalities;
     }
 
     public BigDecimal getMaxMarketValue() {

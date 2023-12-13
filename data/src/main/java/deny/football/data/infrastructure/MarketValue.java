@@ -1,5 +1,7 @@
 package deny.football.data.infrastructure;
 
+import deny.football.data.logic.TransfermarktValueMapper;
+
 import java.math.BigDecimal;
 
 public class MarketValue {
@@ -14,21 +16,11 @@ public class MarketValue {
         this.date = date;
         this.valueString = valueString;
         this.clubId = clubId;
-        this.value = mapToBigDecimalValue(valueString);
+        this.value = TransfermarktValueMapper.map(valueString);
     }
 
-    public BigDecimal mapToBigDecimalValue(String valueString) {
-        if (valueString == null) {
-            return null;
-        }
-        var valueStringWithoutEuroSign = valueString.replace("€", "");
-        if (valueStringWithoutEuroSign.contains("k")) {
-            return new BigDecimal(valueStringWithoutEuroSign.replace("k", ""));
-        } else if (valueStringWithoutEuroSign.contains("m")) {
-            return new BigDecimal(valueStringWithoutEuroSign.replace("m", "")).multiply(BigDecimal.valueOf(1000));
-        } else {
-            throw new RuntimeException(valueStringWithoutEuroSign + " couldn't be map to BigDecimal");
-        }
+    public static MarketValue from(deny.football.data.transfermarkt.dto.MarketValue marketValueDto) {
+        return new MarketValue(marketValueDto.age(), marketValueDto.date(), marketValueDto.value(), marketValueDto.clubID());
     }
 
     public Integer getAge() {
