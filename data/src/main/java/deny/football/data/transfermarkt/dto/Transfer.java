@@ -5,5 +5,6 @@ public record Transfer(Long id,
                        TransferClub to,
                        String date,
                        Boolean upcoming,
-                       String season) {
+                       String season,
+                       String fee) {
 }

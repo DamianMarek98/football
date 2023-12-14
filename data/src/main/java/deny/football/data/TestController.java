@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -56,6 +57,6 @@ public class TestController {
 
     @GetMapping("/players")
     public List<PlayerDocument> getPlayers() {
-        return playerRepository.findAll();
+        return playerRepository.findAllByMaxMarketValueGreaterThanEqual(new BigDecimal("50000.00"));
     }
 }

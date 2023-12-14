@@ -1,13 +1,17 @@
 package deny.football.data.infrastructure;
 
 import deny.football.data.logic.TransfermarktValueMapper;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.math.BigDecimal;
+
+import static org.springframework.data.mongodb.core.mapping.FieldType.DECIMAL128;
 
 public class MarketValue {
     private final Integer age;
     private final String date;
     private final String valueString;
+    @Field(targetType = DECIMAL128)
     private BigDecimal value;
     private final Long clubId;
 

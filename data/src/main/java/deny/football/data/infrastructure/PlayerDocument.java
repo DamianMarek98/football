@@ -2,10 +2,13 @@ package deny.football.data.infrastructure;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+
+import static org.springframework.data.mongodb.core.mapping.FieldType.DECIMAL128;
 
 @Document("player")
 public class PlayerDocument {
@@ -17,17 +20,18 @@ public class PlayerDocument {
     private String dateOfBirth;
     private Integer age;
     private List<String> nationalities;
+    @Field(targetType = DECIMAL128)
     private BigDecimal maxMarketValue;
+    @Field(targetType = DECIMAL128)
     private BigDecimal currentMarketValue;
     private final List<Transfer> transfers;
     private final List<MarketValue> marketValues;
-    private BigDecimal maxValue;
 
     public PlayerDocument(Long id, List<Transfer> transfers, List<MarketValue> marketValues) {
         this.id = id;
         this.transfers = transfers;
         this.marketValues = marketValues;
-        this.maxValue = marketValues.stream()
+        this.maxMarketValue = marketValues.stream()
                 .map(MarketValue::getValue)
                 .filter(Objects::nonNull)
                 .max(BigDecimal::compareTo)
@@ -108,14 +112,6 @@ public class PlayerDocument {
 
     public List<MarketValue> getMarketValues() {
         return marketValues;
-    }
-
-    public BigDecimal getMaxValue() {
-        return maxValue;
-    }
-
-    public void setMaxValue(BigDecimal maxValue) {
-        this.maxValue = maxValue;
     }
 
     @Override

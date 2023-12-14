@@ -9,6 +9,7 @@ public class Transfer {
     private String date;
     private Boolean upcoming;
     private String season;
+    private String fee;
 
     public Transfer(Long id) {
         this.id = id;
@@ -23,6 +24,7 @@ public class Transfer {
         transfer.setDate(transferDto.date());
         transfer.setUpcoming(transferDto.upcoming());
         transfer.setSeason(transferDto.season());
+        transfer.setFee(transferDto.fee());
         return transfer;
     }
 
@@ -84,5 +86,13 @@ public class Transfer {
 
     public void setSeason(String season) {
         this.season = season;
+    }
+
+    public String getFee() {
+        return fee;
+    }
+
+    public void setFee(String fee) {
+        this.fee = fee;
     }
 }
