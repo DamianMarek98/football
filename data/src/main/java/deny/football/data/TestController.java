@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Random;
 
 @RestController
 @RequestMapping
@@ -55,8 +56,11 @@ public class TestController {
         return transfermarktFacade.getMarketValueHistory(playerId);
     }
 
-    @GetMapping("/players")
-    public List<PlayerDocument> getPlayers() {
-        return playerRepository.findAllByMaxMarketValueGreaterThanEqual(new BigDecimal("50000.00"));
+    @GetMapping("/player/random/transfers")
+    public List<deny.football.data.infrastructure.Transfer> getPlayers() {
+        Random rand = new Random();
+        List<PlayerDocument> players = playerRepository.findAllByMaxMarketValueGreaterThanEqual(new BigDecimal("10000.00"));
+        var player = players.get(rand.nextInt(players.size()));
+        return player.getTransfers();
     }
 }
