@@ -9,7 +9,7 @@ import {Transfer} from "../model/transfer";
 export class PlayerServiceService {
   private readonly API_URL = 'http://localhost:8080/player/random/transfers';
 
-  constructor(private http: HttpClient,) { }
+  constructor(private http: HttpClient) { }
 
   getTransfers(): Observable<Transfer[]> {
     return this.http.get<Transfer[]>(this.API_URL);

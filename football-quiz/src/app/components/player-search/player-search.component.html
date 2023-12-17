@@ -1,0 +1,8 @@
+<input type="text" pInputText [(ngModel)]="searchText" (keyup)="searchPlayers($event)"/>
+<p-dropdown [options]="foundPlayers" optionLabel="name" placeholder="Guess a player">
+  <ng-template let-player pTemplate="item">
+    <div class="flex align-items-center gap-2">
+      <div>{{ player.name }}, position: {{ player.position }}, age: {{ player.age }}</div>
+    </div>
+  </ng-template>
+</p-dropdown>
