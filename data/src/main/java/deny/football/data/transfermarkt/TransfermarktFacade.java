@@ -37,7 +37,7 @@ public class TransfermarktFacade {
     }
 
     public SearchResponse search(String searchText, int pageNumber) {
-        return Objects.requireNonNull(restTemplate.getForObject(BASE_URL + "/search/" + searchText, SearchResponse.class, Map.of("page_number", pageNumber)));
+        return Objects.requireNonNull(restTemplate.getForObject(BASE_URL + "/players/search/" + searchText, SearchResponse.class, Map.of("page_number", pageNumber)));
     }
 
     private record ClubPlayersResponse(String id, List<Player> players) {}
