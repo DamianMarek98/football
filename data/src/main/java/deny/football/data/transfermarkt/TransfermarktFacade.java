@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Component
@@ -33,6 +34,10 @@ public class TransfermarktFacade {
     public List<Player> getPlayers(Long clubId) {
         return Objects.requireNonNull(restTemplate.getForObject(BASE_URL + "/clubs/" + clubId + "/players", ClubPlayersResponse.class))
                 .players();
+    }
+
+    public SearchResponse search(String searchText, int pageNumber) {
+        return Objects.requireNonNull(restTemplate.getForObject(BASE_URL + "/search/" + searchText, SearchResponse.class, Map.of("page_number", pageNumber)));
     }
 
     private record ClubPlayersResponse(String id, List<Player> players) {}
