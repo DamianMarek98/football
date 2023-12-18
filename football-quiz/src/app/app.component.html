@@ -1,4 +1,4 @@
-<app-player-search></app-player-search>
+<app-player-search (playerSelectionChanged)="guess($event)"></app-player-search>
 <p-table [value]="transfers" styleClass="p-datatable-gridlines" [tableStyle]="{ 'min-width': '50rem' }">
   <ng-template pTemplate="header">
     <tr>

@@ -24,4 +24,8 @@ export class AppComponent {
     this.playerServiceService.getTransfers()
       .subscribe(transfers => this.transfers = transfers);
   }
+
+  guess(event: any): void {
+
+  }
 }

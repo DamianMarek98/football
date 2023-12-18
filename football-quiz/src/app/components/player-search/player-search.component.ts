@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {PlayerSearchService} from "../../services/player-search.service";
 import {PlayerResult} from "../../model/search";
 import {debounceTime, Subject, switchMap} from "rxjs";
@@ -18,6 +18,9 @@ import {FormsModule} from "@angular/forms";
   styleUrl: './player-search.component.css'
 })
 export class PlayerSearchComponent implements OnInit {
+  @Output() playerSelectionChanged: EventEmitter<PlayerResult> =new EventEmitter<PlayerResult>();
+
+
   foundPlayers: PlayerResult[] = [];
   searchText: string = '';
 
@@ -33,10 +36,14 @@ export class PlayerSearchComponent implements OnInit {
     ).subscribe(response => this.foundPlayers = response.players)
   }
 
-  searchPlayers(event: any) {
+  searchPlayers(event: any): void {
     if (event.keyCode == 13) {
       return;
     }
     this.searchSubject.next(event.target.value);
+  }
+
+  playerSelectionChange(event: any): void {
+    this.playerSelectionChanged.next(event.value);
   }
 }
