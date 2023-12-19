@@ -23,7 +23,7 @@ public class WebSecurityConfig {
     public WebMvcConfigurer corsConfigurer() {
         String[] allowDomains = new String[2];
         allowDomains[0] = "http://localhost:4200";
-        allowDomains[1] = "http://localhost:8080";
+        allowDomains[1] = "http://localhost:8080"; //to host locally allow for local ip address
 
         return new WebMvcConfigurer() {
             @Override

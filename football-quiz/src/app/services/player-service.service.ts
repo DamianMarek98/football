@@ -7,7 +7,7 @@ import {Transfer} from "../model/transfer";
   providedIn: 'root'
 })
 export class PlayerServiceService {
-  private readonly API_URL = 'http://localhost:8080/player/random/transfers';
+  private readonly API_URL = '/api/player/random/transfers';
 
   constructor(private http: HttpClient) { }
 

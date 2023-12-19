@@ -8,7 +8,7 @@ import {SearchResult} from "../model/search";
   providedIn: 'root'
 })
 export class PlayerSearchService {
-  private readonly API_URL = 'http://localhost:8080/transfermarkt-search';
+  private readonly API_URL = '/api/transfermarkt-search';
 
   constructor(private http: HttpClient) { }
 

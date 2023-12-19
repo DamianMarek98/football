@@ -7,7 +7,7 @@ import {JourneyTransfer} from "../model/journey-game";
   providedIn: 'root'
 })
 export class PlayerJourneyService {
-  private readonly API_URL = 'http://localhost:8080/journey-games';
+  private readonly API_URL = '/api/journey-games';
 
   constructor(private http: HttpClient) { }
 
