@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/journey-games")
+@RequestMapping("/api/journey-games")
 public class JourneyGameController {
     private final JourneyGameStarter journeyGameStarter;
     private final JourneyGameDtoConverter journeyGameDtoConverter;

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api")
 public class TestController {
     private final TransfermarktFacade transfermarktFacade;
     private final PlayerRepository playerRepository;

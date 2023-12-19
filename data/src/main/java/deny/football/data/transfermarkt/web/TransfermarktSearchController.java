@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/transfermarkt-search")
+@RequestMapping("/api/transfermarkt-search")
 public class TransfermarktSearchController {
     private final TransfermarktFacade transfermarktFacade;
 
