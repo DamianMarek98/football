@@ -1,0 +1,5 @@
+.image-club-name-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 25px auto;
+}
