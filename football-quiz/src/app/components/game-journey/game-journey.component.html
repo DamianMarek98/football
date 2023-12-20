@@ -2,42 +2,86 @@
 <p-button label="New game" (onClick)="startNewJourneyGame()"></p-button>
 <p-messages [(value)]="messages" [enableService]="false" [closable]="true"></p-messages>
 <p-divider></p-divider>
-<p-table [value]="journeyGame?.transfers" styleClass="p-datatable-gridlines" [tableStyle]="{ 'min-width': '50rem' }">
-  <ng-template pTemplate="header">
-    <tr>
-      <th>Season</th>
-      <th>Date</th>
-      <th>From:</th>
-      <th>To:</th>
-      <th>Fee:</th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-transfer>
-    <tr>
-      <td>{{ transfer.season }}</td>
-      <td>{{ transfer.date }}</td>
-      <td>
-        <div class="image-club-name-grid">
-          <div *ngIf="transfer.clubFromImage !== null">
-            <img [src]="transfer.clubFromImage" width="25px" height="25px" alt=""/>
+<div *ngIf="!mobile; else mobileTransfers">
+  <p-table [value]="journeyGame?.transfers" styleClass="p-datatable-gridlines" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Season</th>
+        <th>Date</th>
+        <th>From:</th>
+        <th>To:</th>
+        <th>Fee:</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-transfer>
+      <tr>
+        <td>{{ transfer.season }}</td>
+        <td>{{ transfer.date }}</td>
+        <td>
+          <div class="image-club-name-grid">
+            <div *ngIf="transfer.clubFromImage !== null">
+              <img [src]="transfer.clubFromImage" width="25px" height="25px" alt=""/>
+            </div>
+            <div>
+              {{ transfer.clubFromName }}
+            </div>
           </div>
-          <div>
-            {{ transfer.clubFromName }}
+        </td>
+        <td>
+          <div class="image-club-name-grid">
+            <div *ngIf="transfer.clubToImage !== null">
+              <img [src]="transfer.clubToImage" width="25px" height="25px" alt=""/></div>
+            <div>
+              {{ transfer.clubToName }}
+            </div>
+          </div>
+        </td>
+        <td>
+          <div [innerHTML]="transfer.fee === null ? '-' : transfer.fee"></div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+<ng-template #mobileTransfers>
+  <p-dataView #dv [value]="journeyGame?.transfers">
+    <ng-template pTemplate="list" let-transfers>
+      <div class="grid grid-nogutter" *ngFor="let transfer of transfers; let first = first">
+        <div class="col-12">
+          Season: <strong>{{ transfer.season }}</strong>, at {{ transfer.date }}
+        </div>
+        <div class="col-6">
+          <div class="grid">
+            <div class="col-9">
+              From: <br>
+              <strong>{{ transfer.clubFromName }}</strong>
+            </div>
+            <div *ngIf="transfer.clubFromImage !== null; else emptyDiv" class="col-3">
+              <img [src]="transfer.clubFromImage" width="25px" height="25px" alt=""/>
+            </div>
           </div>
         </div>
-      </td>
-      <td>
-        <div class="image-club-name-grid">
-          <div *ngIf="transfer.clubToImage !== null">
-            <img [src]="transfer.clubToImage" width="25px" height="25px" alt=""/></div>
-          <div>
-            {{ transfer.clubToName }}
+        <div class="col-6">
+          <div class="grid">
+            <div class="col-9">
+              To: <br>
+              <strong>{{ transfer.clubToName }}</strong>
+            </div>
+            <div *ngIf="transfer.clubToImage !== null" class="col-3">
+              <img [src]="transfer.clubToImage" width="25px" height="25px" alt=""/>
+            </div>
           </div>
         </div>
-      </td>
-      <td>
-        <div [innerHTML]="transfer.fee === null ? '-' : transfer.fee"></div>
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
+        For:&nbsp;<strong><div [innerHTML]="transfer.fee === null ? '-' : transfer.fee"></div></strong>
+        <div class="col-12">
+          <p-divider></p-divider>
+        </div>
+      </div>
+    </ng-template>
+  </p-dataView>
+</ng-template>
+
+
+<ng-template #emptyDiv>
+  <div class="col-3"></div>
+</ng-template>
