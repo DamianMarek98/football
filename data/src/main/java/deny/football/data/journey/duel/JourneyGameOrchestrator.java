@@ -1,6 +1,8 @@
 package deny.football.data.journey.duel;
 
+import deny.football.data.journey.duel.events.PlayerJoinedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +13,13 @@ import java.util.UUID;
 public class JourneyGameOrchestrator {
     private JourneyDuel currentDuel;
     private final JourneyDuelFactory journeyDuelFactory;
+    private ApplicationEventPublisher applicationEventPublisher;
+
 
     @Autowired
-    public JourneyGameOrchestrator(JourneyDuelFactory journeyDuelFactory) {
+    public JourneyGameOrchestrator(JourneyDuelFactory journeyDuelFactory, ApplicationEventPublisher applicationEventPublisher) {
         this.journeyDuelFactory = journeyDuelFactory;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     public void createNewGame() {
@@ -34,7 +39,9 @@ public class JourneyGameOrchestrator {
     }
 
     public UUID join(String name) {
-        return currentDuel.addPlayer(name);
+        UUID uuid = currentDuel.addPlayer(name);
+        applicationEventPublisher.publishEvent(new PlayerJoinedEvent(currentDuel.getPlayerIdNameMap().values()));
+        return uuid;
     }
 
     public boolean makeGuess(Long playerId) {
