@@ -10,13 +10,18 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/journey-game")
+@RequestMapping("/api/v1/journey-games")
 public class JourneyDuelController {
     private final JourneyGameOrchestrator journeyGameOrchestrator;
 
     @Autowired
     public JourneyDuelController(JourneyGameOrchestrator journeyGameOrchestrator) {
         this.journeyGameOrchestrator = journeyGameOrchestrator;
+    }
+
+    @GetMapping("/exists")
+    public Boolean getCurrentGame() {
+        return journeyGameOrchestrator.gameExists();
     }
 
     @PostMapping("/create")
@@ -36,5 +41,4 @@ public class JourneyDuelController {
                 .map(JourneyGamePlayerDto::new)
                 .toList();
     }
-
 }

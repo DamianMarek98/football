@@ -1,0 +1,21 @@
+<div *ngIf="!gameInProgress">
+  <div *ngIf="!joined else playersComponent">
+    <input type="text" pInputText [(ngModel)]="name"/>
+    <p-button label="Join" (click)="join()"></p-button>
+  </div>
+
+  <ng-template #playersComponent>
+    <p-table [value]="players" styleClass="p-datatable-gridlines" [tableStyle]="{ 'min-width': '50rem' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Players:</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-player>
+        <tr>
+          <td>{{ player }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </ng-template>
+</div>

@@ -42,4 +42,8 @@ public class JourneyGameOrchestrator {
         //todo notify if wygranko
         return result;
     }
+
+    public boolean gameExists() {
+        return currentDuel != null;
+    }
 }
