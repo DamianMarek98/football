@@ -12,6 +12,7 @@ import {TableModule} from "primeng/table";
 import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 import {CardModule} from "primeng/card";
 import {DataViewModule} from "primeng/dataview";
+import {TransfersComponent} from "../transfers/transfers.component";
 
 @Component({
   selector: 'app-game-journey',
@@ -26,7 +27,8 @@ import {DataViewModule} from "primeng/dataview";
     TableModule,
     CardModule,
     NgForOf,
-    DataViewModule
+    DataViewModule,
+    TransfersComponent
   ],
   templateUrl: './game-journey.component.html',
   styleUrl: './game-journey.component.css'
@@ -34,17 +36,12 @@ import {DataViewModule} from "primeng/dataview";
 export class GameJourneyComponent {
   journeyGame: JourneyGame | any;
   playerResult: PlayerResult | undefined;
-  mobile: boolean = false;
   messages: Message[] = [];
   messageSuccess: Message = { severity: 'success', summary: 'Success', detail: 'That\'s right it\'s!' };
   messageWarn: Message = { severity: 'warn', summary: 'Nope', detail: 'That\'s not him!' };
 
 
-  constructor(private playerJourneyService: PlayerJourneyService, private breakpointObserver: BreakpointObserver) {
-    breakpointObserver.observe([
-      Breakpoints.HandsetLandscape,
-      Breakpoints.HandsetPortrait
-    ]).subscribe(result => this.mobile = result.matches);
+  constructor(private playerJourneyService: PlayerJourneyService) {
   }
 
   ngOnInit() {
