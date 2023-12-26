@@ -37,4 +37,12 @@ public class JourneyDuel {
     public Long getPlayerId() {
         return player.getId();
     }
+
+    public String getPlayerName() {
+        return player.getName();
+    }
+
+    public String getPlayerImageURL() {
+        return player.getImageURL();
+    }
 }

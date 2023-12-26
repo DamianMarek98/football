@@ -2,6 +2,7 @@ package deny.football.data.journey.duel;
 
 import deny.football.data.journey.duel.events.GameStartedEvent;
 import deny.football.data.journey.duel.events.PlayerJoinedEvent;
+import deny.football.data.journey.duel.events.PlayerWonEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+//FIXME this needs refactor -> handles too many processes
 @Service
 public class JourneyGameOrchestrator {
     private JourneyDuel currentDuel;
@@ -50,13 +52,18 @@ public class JourneyGameOrchestrator {
         applicationEventPublisher.publishEvent(new GameStartedEvent(currentDuel.getPlayerId()));
     }
 
-    public boolean makeGuess(Long playerId) {
+    public boolean makeGuess(UUID id, Long playerId) {
         var result = currentDuel.makeGuess(playerId);
-        //todo notify if wygranko
+        if (result) {
+            PlayerWonEvent playerWonEvent = new PlayerWonEvent(currentDuel.getPlayerIdNameMap().get(id),
+                    currentDuel.getPlayerName(),
+                    currentDuel.getPlayerImageURL());
+            applicationEventPublisher.publishEvent(playerWonEvent);
+        }
         return result;
     }
 
     public boolean gameExists() {
-        return currentDuel != null;
+        return currentDuel != null && !currentDuel.getPlayerIdNameMap().isEmpty();
     }
 }

@@ -21,4 +21,13 @@ public class GameNotifier {
     public void sendGameStarted(List<TransferDto> transfers) {
         simpMessagingTemplate.convertAndSend("/topic/game-started", transfers);
     }
+
+    @Async
+    public void sendGameFinished(String playerName, String journeyPlayerName, String imageURL) {
+        simpMessagingTemplate.convertAndSend("/topic/game-finished", new GameFinishedDto(playerName, journeyPlayerName, imageURL));
+    }
+
+    private record GameFinishedDto(String playerName,
+                                   String journeyPlayerName,
+                                   String imageURL) {}
 }

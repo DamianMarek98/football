@@ -30,4 +30,8 @@ export class JourneyDuelService {
   public start(): Observable<void> {
     return this.http.post<void>(this.API_URL + '/start', {});
   }
+
+  public guess(playerId: string, guessId: string): Observable<boolean> {
+    return this.http.post<boolean>(this.API_URL + '/' + guessId + '/guess/' + playerId, {});
+  }
 }

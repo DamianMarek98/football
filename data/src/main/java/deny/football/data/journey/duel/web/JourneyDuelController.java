@@ -47,4 +47,10 @@ public class JourneyDuelController {
     public void startGame() {
         journeyGameOrchestrator.startGame();
     }
+
+    @PostMapping("/{journeyPlayerId}/guess/{playerId}")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean startGame(@PathVariable UUID journeyPlayerId, @PathVariable Long playerId) {
+        return journeyGameOrchestrator.makeGuess(journeyPlayerId, playerId);
+    }
 }

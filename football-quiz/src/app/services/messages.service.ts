@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Subject} from "rxjs";
 import {JourneyTransfer} from "../model/journey-game";
+import {GameFinished} from "../model/journey-duel";
 
 // Declare SockJS and Stomp
 declare var SockJS: any;
@@ -12,6 +13,7 @@ declare var Stomp: any;
 export class MessageService {
   stompClient: any;
   private _playersSubject = new Subject<string[]>();
+  private _gameFinishedSubject = new Subject<GameFinished>();
   private _gameStartedSubject = new Subject<JourneyTransfer[]>();
 
 
@@ -32,6 +34,12 @@ export class MessageService {
           this._gameStartedSubject.next(JSON.parse(message.body));
         }
       });
+
+      this.stompClient.subscribe('/topic/game-finished', (message: any) => {
+        if (message.body) {
+          this._gameFinishedSubject.next(JSON.parse(message.body));
+        }
+      });
     });
   }
 
@@ -42,5 +50,10 @@ export class MessageService {
 
   get gameStartedSubject(): Subject<JourneyTransfer[]> {
     return this._gameStartedSubject;
+  }
+
+
+  get gameFinishedSubject(): Subject<GameFinished> {
+    return this._gameFinishedSubject;
   }
 }

@@ -22,6 +22,21 @@
 </div>
 
 <ng-template #gameComponent>
-<!--  <app-player-search (playerSelectionChanged)="guess($event)"></app-player-search> TODO-->
+  <div *ngIf="!gameFinished; else gameResultComponent">
+    <app-player-search (playerSelectionChanged)="guess($event)"></app-player-search>
+  </div>
+  <p-messages [(value)]="messages" [enableService]="false" [closable]="true"></p-messages>
+  <p-divider></p-divider>
   <app-transfers [transfers]="transfers"></app-transfers>
+</ng-template>
+
+<ng-template #gameResultComponent>
+  <div *ngIf="won">You won!</div>
+  <div *ngIf="!won">
+    Player {{ gameFinishInformation?.playerName }} won! <br>
+    It was: {{ gameFinishInformation?.journeyPlayerName }}
+  </div>
+  <img [src]="gameFinishInformation?.imageURL" width="150px" height="200px" alt=""/>
+  <p-divider *ngIf="gameOwner"></p-divider>
+  <p-button *ngIf="gameOwner" label="New game" (click)="newGame()"></p-button>
 </ng-template>
