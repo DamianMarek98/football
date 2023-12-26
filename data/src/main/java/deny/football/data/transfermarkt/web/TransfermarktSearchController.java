@@ -5,6 +5,7 @@ import deny.football.data.transfermarkt.dto.SearchResponse;
 import deny.football.data.transfermarkt.web.dto.request.PlayerSearchRequest;
 import deny.football.data.transfermarkt.web.dto.response.PlayerResult;
 import deny.football.data.transfermarkt.web.dto.response.PlayerSearchResult;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +24,9 @@ public class TransfermarktSearchController {
 
     @PostMapping
     public PlayerSearchResult searchPlayers(@RequestBody PlayerSearchRequest request) {
+        if (Strings.isBlank(request.searchText())) {
+            return PlayerSearchResult.empty();
+        }
         SearchResponse transfermarktSearchResult = transfermarktFacade.search(request.searchText(), request.page());
         return new PlayerSearchResult(transfermarktSearchResult.pageNumber(), transfermarktSearchResult.lastPageNumber(),
                 transfermarktSearchResult.results().stream()

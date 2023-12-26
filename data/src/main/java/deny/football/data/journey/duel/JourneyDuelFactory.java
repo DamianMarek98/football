@@ -20,13 +20,13 @@ public class JourneyDuelFactory {
     }
 
     public JourneyDuel createGameDuel() {
-        List<PlayerDocument> players = playerRepository.findAllByMaxMarketValueGreaterThanEqual(new BigDecimal("15000.00"));
+        List<PlayerDocument> players = playerRepository.findAllByMaxMarketValueGreaterThanEqual(new BigDecimal("20000.00"));
         var player = players.get(RANDOM.nextInt(players.size()));
         return new JourneyDuel(player);
     }
 
     public JourneyDuel createGameDuel(JourneyDuel journeyDuel) {
-        List<PlayerDocument> players = playerRepository.findAllByMaxMarketValueGreaterThanEqual(new BigDecimal("15000.00"));
+        List<PlayerDocument> players = playerRepository.findAllByMaxMarketValueGreaterThanEqual(new BigDecimal("20000.00"));
         var player = players.get(RANDOM.nextInt(players.size()));
         return new JourneyDuel(journeyDuel.getPlayerIdNameMap(), player);
     }

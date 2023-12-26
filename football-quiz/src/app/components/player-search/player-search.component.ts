@@ -31,7 +31,7 @@ export class PlayerSearchComponent implements OnInit {
 
   ngOnInit() {
     this.searchSubject.pipe(
-      debounceTime(3000),
+      debounceTime(1500),
       switchMap(searchText => this.playerSearchService.searchPlayers(searchText))
     ).subscribe(response => this.foundPlayers = response.players)
   }
