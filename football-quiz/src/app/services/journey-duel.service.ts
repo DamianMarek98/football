@@ -26,4 +26,8 @@ export class JourneyDuelService {
   public players(): Observable<string[]> {
     return this.http.post<string[]>(this.API_URL + '/players', {});
   }
+
+  public start(): Observable<void> {
+    return this.http.post<void>(this.API_URL + '/start', {});
+  }
 }

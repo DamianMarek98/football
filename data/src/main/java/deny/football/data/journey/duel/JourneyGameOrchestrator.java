@@ -1,9 +1,9 @@
 package deny.football.data.journey.duel;
 
+import deny.football.data.journey.duel.events.GameStartedEvent;
 import deny.football.data.journey.duel.events.PlayerJoinedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.UUID;
 public class JourneyGameOrchestrator {
     private JourneyDuel currentDuel;
     private final JourneyDuelFactory journeyDuelFactory;
-    private ApplicationEventPublisher applicationEventPublisher;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
 
     @Autowired
@@ -28,7 +28,6 @@ public class JourneyGameOrchestrator {
         } else {
             currentDuel = journeyDuelFactory.createGameDuel(currentDuel);
         }
-        //todo notify
     }
 
     public List<String> getPlayerNames() {
@@ -42,6 +41,13 @@ public class JourneyGameOrchestrator {
         UUID uuid = currentDuel.addPlayer(name);
         applicationEventPublisher.publishEvent(new PlayerJoinedEvent(currentDuel.getPlayerIdNameMap().values()));
         return uuid;
+    }
+
+    public void startGame() {
+        if (currentDuel == null) {
+            throw new RuntimeException("Game not created!");
+        }
+        applicationEventPublisher.publishEvent(new GameStartedEvent(currentDuel.getPlayerId()));
     }
 
     public boolean makeGuess(Long playerId) {

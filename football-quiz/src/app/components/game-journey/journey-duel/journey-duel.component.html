@@ -1,4 +1,4 @@
-<div *ngIf="!gameInProgress">
+<div *ngIf="!gameInProgress else gameComponent">
   <div *ngIf="!joined else playersComponent">
     <input type="text" pInputText [(ngModel)]="name"/>
     <p-button label="Join" (click)="join()"></p-button>
@@ -17,5 +17,11 @@
         </tr>
       </ng-template>
     </p-table>
+    <p-button *ngIf="gameOwner" label="Start game" (click)="startGame()"></p-button>
   </ng-template>
 </div>
+
+<ng-template #gameComponent>
+<!--  <app-player-search (playerSelectionChanged)="guess($event)"></app-player-search> TODO-->
+  <app-transfers [transfers]="transfers"></app-transfers>
+</ng-template>

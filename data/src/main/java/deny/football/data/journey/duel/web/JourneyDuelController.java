@@ -41,4 +41,10 @@ public class JourneyDuelController {
                 .map(JourneyGamePlayerDto::new)
                 .toList();
     }
+
+    @PostMapping("/start")
+    @ResponseStatus(HttpStatus.OK)
+    public void startGame() {
+        journeyGameOrchestrator.startGame();
+    }
 }

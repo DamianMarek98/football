@@ -33,4 +33,8 @@ public class JourneyDuel {
     public Map<UUID, String> getPlayerIdNameMap() {
         return new HashMap<>(playerIdNameMap);
     }
+
+    public Long getPlayerId() {
+        return player.getId();
+    }
 }
