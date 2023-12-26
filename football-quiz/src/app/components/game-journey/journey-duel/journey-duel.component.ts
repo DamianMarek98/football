@@ -5,6 +5,8 @@ import {PaginatorModule} from "primeng/paginator";
 import {NgIf} from "@angular/common";
 import {TableModule} from "primeng/table";
 import {ButtonModule} from "primeng/button";
+import {MessageService} from "../../../services/messages.service";
+
 
 @Component({
   selector: 'app-journey-duel',
@@ -14,7 +16,7 @@ import {ButtonModule} from "primeng/button";
     PaginatorModule,
     NgIf,
     TableModule,
-    ButtonModule
+    ButtonModule,
   ],
   templateUrl: './journey-duel.component.html',
   styleUrl: './journey-duel.component.css'
@@ -26,7 +28,7 @@ export class JourneyDuelComponent {
   gameInProgress: boolean = false;
   name: String = '';
 
-  constructor(private journeyDuelService: JourneyDuelService) {
+  constructor(private journeyDuelService: JourneyDuelService, private messageService: MessageService) {
     journeyDuelService.exists().subscribe(result => {
       this.gameExists = result;
       if (!this.gameExists) {
