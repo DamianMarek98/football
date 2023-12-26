@@ -23,12 +23,13 @@ import {MessageService} from "../../../services/messages.service";
 })
 export class JourneyDuelComponent {
   gameExists: Boolean = false;
-  players: String[] = [];
+  players: string[] = [];
   joined: boolean = false;
   gameInProgress: boolean = false;
   name: String = '';
 
   constructor(private journeyDuelService: JourneyDuelService, private messageService: MessageService) {
+    messageService.playersSubject.subscribe((players: string[]) => this.players = players);
     journeyDuelService.exists().subscribe(result => {
       this.gameExists = result;
       if (!this.gameExists) {
