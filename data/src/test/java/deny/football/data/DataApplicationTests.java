@@ -11,10 +11,4 @@ class DataApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
-	@Test
-	void test() {
-		assertThat(1).isEqualTo(0);
-	}
-
 }
