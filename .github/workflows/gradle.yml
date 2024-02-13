@@ -34,7 +34,8 @@ jobs:
         gradle-version: 8.5
 
     - name: Build with Gradle Wrapper
-      run: cd data 
+      run: |
+          cd data 
           ./gradlew build
 
   dependency-submission:
