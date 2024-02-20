@@ -48,7 +48,7 @@ public class JourneyDuel {
         return player.getId().equals(playerId);
     }
 
-    public Map<UUID, JourneyDuelPlayer> getPlayerIdPlayerMap() {
+    Map<UUID, JourneyDuelPlayer> getPlayerIdPlayerMap() {
         return new HashMap<>(playerIdPlayerMap);
     }
 
