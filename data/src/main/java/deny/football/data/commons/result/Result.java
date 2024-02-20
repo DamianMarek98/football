@@ -35,6 +35,21 @@ public class Result {
     public boolean isFailure() {
         return resultPair.getFirst().isPresent();
     }
+
+    public List<DomainEvent> getEvents() {
+        if (resultPair.getSecond().isEmpty()) {
+            return List.of();
+        }
+        return resultPair.getSecond().get().events();
+    }
+
+    public String getMessage() {
+        if (resultPair.getFirst().isEmpty()) {
+            return "OK";
+        }
+
+        return resultPair.getFirst().get().message();
+    }
 }
 
 record Success(List<DomainEvent> events) {}

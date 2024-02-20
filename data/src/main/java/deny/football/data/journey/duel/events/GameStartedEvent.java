@@ -1,4 +1,6 @@
 package deny.football.data.journey.duel.events;
 
-public record GameStartedEvent(Long playerId) {
+import deny.football.data.commons.result.DomainEvent;
+
+public record GameStartedEvent(Long playerId) implements DomainEvent {
 }

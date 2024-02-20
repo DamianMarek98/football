@@ -1,8 +1,6 @@
 package deny.football.data.journey.duel;
 
-import deny.football.data.journey.duel.events.GameStartedEvent;
-import deny.football.data.journey.duel.events.PlayerJoinedEvent;
-import deny.football.data.journey.duel.events.PlayerWonEvent;
+import deny.football.data.journey.duel.exceptions.GameNotCreatedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -32,37 +30,31 @@ public class JourneyGameOrchestrator {
     }
 
     public List<String> getPlayerNames() {
-        return currentDuel.getPlayerIdNameMap()
-                .values()
-                .stream()
-                .toList();
+        return currentDuel.getPlayerNames();
     }
 
     public UUID join(String name) {
-        UUID uuid = currentDuel.addPlayer(name);
-        applicationEventPublisher.publishEvent(new PlayerJoinedEvent(currentDuel.getPlayerIdNameMap().values()));
-        return uuid;
+        JourneyDuelPlayer journeyDuelPlayer = new JourneyDuelPlayer(name);
+        var result = currentDuel.addPlayer(journeyDuelPlayer);
+        result.getEvents().forEach(applicationEventPublisher::publishEvent);
+        return journeyDuelPlayer.getId();
     }
 
     public void startGame() {
         if (currentDuel == null) {
-            throw new RuntimeException("Game not created!");
+            throw new GameNotCreatedException();
         }
-        applicationEventPublisher.publishEvent(new GameStartedEvent(currentDuel.getPlayerId()));
+        var result = currentDuel.startGame();
+        result.getEvents().forEach(applicationEventPublisher::publishEvent);
     }
 
     public boolean makeGuess(UUID id, Long playerId) {
-        var result = currentDuel.makeGuess(playerId);
-        if (result) {
-            PlayerWonEvent playerWonEvent = new PlayerWonEvent(currentDuel.getPlayerIdNameMap().get(id),
-                    currentDuel.getPlayerName(),
-                    currentDuel.getPlayerImageURL());
-            applicationEventPublisher.publishEvent(playerWonEvent);
-        }
-        return result;
+        var result = currentDuel.makeGuess(id, playerId);
+        result.getEvents().forEach(applicationEventPublisher::publishEvent);
+        return result.isSuccessful();
     }
 
     public boolean gameExists() {
-        return currentDuel != null && !currentDuel.getPlayerIdNameMap().isEmpty();
+        return currentDuel != null && !currentDuel.getPlayerIdPlayerMap().isEmpty();
     }
 }

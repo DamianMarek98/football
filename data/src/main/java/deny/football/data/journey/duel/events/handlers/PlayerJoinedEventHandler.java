@@ -17,6 +17,6 @@ public class PlayerJoinedEventHandler {
 
     @EventListener
     public void handleContextStart(PlayerJoinedEvent event) {
-        playersNotifier.sendPlayers(event.players());
+        playersNotifier.sendPlayers(event.playerNames());
     }
 }
