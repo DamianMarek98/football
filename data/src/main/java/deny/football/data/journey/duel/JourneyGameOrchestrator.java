@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
-//FIXME this needs refactor -> handles too many processes
 @Service
 public class JourneyGameOrchestrator {
     private JourneyDuel currentDuel;
