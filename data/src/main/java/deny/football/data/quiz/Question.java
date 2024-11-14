@@ -1,9 +1,9 @@
 package deny.football.data.quiz;
 
-import java.util.List;
+import java.util.Set;
 
-interface Question {
-    List<Answer<?>> getAnswers();
+interface Question<T> {
+    Set<Answer<T>> getAnswers();
 
     boolean resolve(Long answerId);
 }
