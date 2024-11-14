@@ -2,7 +2,7 @@ package deny.football.data.quiz;
 
 import java.util.Set;
 
-class SingleChoiceQuestion<T> implements Question<T> {
+class SingleChoiceQuestion<T> implements Question<T, Long> {
     private final Set<Answer<T>> answers;
     private final long correctAnswerId;
 

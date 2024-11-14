@@ -2,8 +2,8 @@ package deny.football.data.quiz;
 
 import java.util.Set;
 
-interface Question<T> {
+interface Question<T, A> {
     Set<Answer<T>> getAnswers();
 
-    boolean resolve(Long answerId);
+    boolean resolve(A answer);
 }
